@@ -2428,7 +2428,10 @@ function printInvoice(debtorId){
   </div>
 
 </div>
-<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+<div class="no-print" style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+<button class="print-btn" onclick="window.print()" style="margin:0">🖨 Print / Save as PDF</button>
+<button class="print-btn" onclick="window.close()" style="margin:0;background:#555">✕ Close</button>
+</div>
 </body>
 </html>`;
 
@@ -2634,7 +2637,10 @@ function printReceipt(debtorId){
 
   </div>
 </div>
-<button class="print-btn no-print" onclick="window.print()">🖨 Print Receipt</button>
+<div class="no-print" style="display:flex;gap:12px;justify-content:center;margin-top:20px">
+<button class="print-btn" onclick="window.print()" style="margin:0">🖨 Print Receipt</button>
+<button class="print-btn" onclick="window.close()" style="margin:0;background:#555">✕ Close</button>
+</div>
 </body>
 </html>`;
 
@@ -3385,7 +3391,10 @@ function printTxnInvoice(recId){
     <div class="inv-stamp">FA Accountant · Sierra Leone<br>${today}</div>
   </div>
 </div>
-<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+<div class="no-print" style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+<button class="print-btn" onclick="window.print()" style="margin:0">🖨 Print / Save as PDF</button>
+<button class="print-btn" onclick="window.close()" style="margin:0;background:#555">✕ Close</button>
+</div>
 </body>
 </html>`;
 
@@ -3520,7 +3529,10 @@ function printTxnReceipt(recId){
 
   </div>
 </div>
-<button class="print-btn no-print" onclick="window.print()">🖨 Print Receipt</button>
+<div class="no-print" style="display:flex;gap:12px;justify-content:center;margin-top:20px">
+<button class="print-btn" onclick="window.print()" style="margin:0">🖨 Print Receipt</button>
+<button class="print-btn" onclick="window.close()" style="margin:0;background:#555">✕ Close</button>
+</div>
 </body>
 </html>`;
 
@@ -3835,7 +3847,10 @@ function printGroupInvoice(saleGroupId){
     <div class="fstamp">FA Accountant · Sierra Leone<br>${today}</div>
   </div>
 </div>
-<button class="pbtn no-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+<div class="no-print" style="display:flex;gap:12px;justify-content:center;margin-top:24px">
+<button class="pbtn" onclick="window.print()" style="margin:0">🖨 Print / Save as PDF</button>
+<button class="pbtn" onclick="window.close()" style="margin:0;background:#555">✕ Close</button>
+</div>
 </body></html>`;
 
   const win=window.open('','_blank','width=860,height=740');
@@ -3936,7 +3951,10 @@ function printGroupReceipt(saleGroupId){
 
   <div class="ftr">Thank you for your business<br>FA Accountant · Sierra Leone · ${today}</div>
 </div></div>
-<button class="pbtn no-print" onclick="window.print()">🖨 Print Receipt</button>
+<div class="no-print" style="display:flex;gap:12px;justify-content:center;margin-top:20px">
+<button class="pbtn" onclick="window.print()" style="margin:0">🖨 Print Receipt</button>
+<button class="pbtn" onclick="window.close()" style="margin:0;background:#555">✕ Close</button>
+</div>
 </body></html>`;
 
   const win=window.open('','_blank','width=460,height=680');
