@@ -915,10 +915,11 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
     <div class="ob-dot on" id="dot0"></div>
     <div class="ob-dot" id="dot1"></div>
     <div class="ob-dot" id="dot2"></div>
+    <div class="ob-dot" id="dot3"></div>
   </div>
 
   <div class="ob-step active" id="ob-step0">
-    <div class="ob-label">Step 1 of 3</div>
+    <div class="ob-label">Step 1 of 4</div>
     <div class="ob-question">What kind of business do you run?</div>
     <div class="biz-grid" id="biz-picker"></div>
     <div class="error-msg" id="ob-err0"></div>
@@ -926,7 +927,7 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
   </div>
 
   <div class="ob-step" id="ob-step1">
-    <div class="ob-label">Step 2 of 3</div>
+    <div class="ob-label">Step 2 of 4</div>
     <div class="ob-question">What is the name of your business?</div>
     <input class="ob-input" id="ob-bizname" placeholder="e.g. Fatima's Boutique" maxlength="50">
     <div class="error-msg" id="ob-err1"></div>
@@ -935,7 +936,31 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
   </div>
 
   <div class="ob-step" id="ob-step2">
-    <div class="ob-label">Step 3 of 3</div>
+    <div class="ob-label">Step 3 of 4</div>
+    <div class="ob-question">Business contact details</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--ink3);margin-bottom:16px;line-height:1.6">These appear on your invoices and receipts. All fields are optional — you can skip and fill in later.</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div>
+        <label style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:4px">📞 Contact / Phone</label>
+        <input class="ob-input" id="ob-phone" placeholder="e.g. +232 76 000 000" maxlength="30" style="margin-bottom:0">
+      </div>
+      <div>
+        <label style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:4px">✉️ Email address</label>
+        <input class="ob-input" id="ob-email" placeholder="e.g. fatima@email.com" maxlength="60" type="email" style="margin-bottom:0">
+      </div>
+      <div>
+        <label style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:4px">📍 Physical address</label>
+        <input class="ob-input" id="ob-address" placeholder="e.g. 14 Siaka Stevens Street, Freetown" maxlength="100" style="margin-bottom:0">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="ob-btn" onclick="obNext(2)">Continue →</button>
+      <button class="ob-btn-ghost" onclick="obBack(1)">← Back</button>
+    </div>
+  </div>
+
+  <div class="ob-step" id="ob-step3">
+    <div class="ob-label">Step 4 of 4</div>
     <div class="ob-question">Which language do you prefer?</div>
     <div class="type-btns" style="margin-bottom:20px;max-width:260px">
       <button class="type-btn income on" id="ob-en" onclick="obSetLang('en')">English</button>
@@ -943,7 +968,7 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
     </div>
     <div style="display:flex;gap:10px">
       <button class="ob-btn" onclick="obFinish()">Start tracking →</button>
-      <button class="ob-btn-ghost" onclick="obBack(1)">← Back</button>
+      <button class="ob-btn-ghost" onclick="obBack(2)">← Back</button>
     </div>
   </div>
 </div>
@@ -971,6 +996,7 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
       <button class="hdr-btn" id="lang-kr" onclick="setLang('kr')">KR</button>
       <button class="hdr-btn" onclick="openShareModal()">📤 Share</button>
       <!-- Admin accessed via ?admin in URL -->
+      <button class="hdr-btn" onclick="openProfileModal()" title="Edit business contact details">⚙️ Profile</button>
       <button class="hdr-btn" onclick="doStartNewBusiness()" title="Start tracking a different business">🏪 New Biz</button>
       <button class="hdr-btn" onclick="doLogout()" style="color:var(--red);border-color:var(--red)" title="Log out">↩ Logout</button>
       <span title="Firebase sync status" class="sync-dot" id="sync-dot"></span>
@@ -1015,6 +1041,7 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
 
   <!-- ── TOOL ROW ── -->
   <div class="tool-row">
+    <button class="hdr-btn" onclick="openSaleBuilder()" style="background:var(--green);color:#fff;border-color:var(--green);font-weight:700">🛒 New Sale</button>
     <button class="hdr-btn" onclick="openReportModal()" style="background:var(--paper2)">📊 Reports</button>
     <button class="hdr-btn" onclick="openBackupModal()" style="background:var(--paper2)">💾 Backup</button>
     <button class="hdr-btn" onclick="openInventoryPanel()" style="background:var(--paper2)" id="inv-panel-btn">🗃 Inventory</button>
@@ -1062,7 +1089,7 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
       <div class="field">
         <label id="lbl-item">Item / Product</label>
         <div class="tag-chips" id="item-chips"></div>
-        <input type="text" id="inp-item" placeholder="Or type your own…" maxlength="60" style="margin-top:8px">
+        <input type="hidden" id="inp-item" value="">
       </div>
       <div class="form-actions">
         <button class="next-btn" onclick="entryNext(1)">Next →</button>
@@ -1082,7 +1109,7 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
           </div>
         </div>
         <div class="field" id="qty-field-wrap">
-          <label id="lbl-qty">Quantity Sold <span style="color:var(--ink3)" id="lbl-qty-optional">(optional)</span></label>
+          <label id="lbl-qty">Quantity Sold <span style="color:var(--red)" id="lbl-qty-optional">* required</span></label>
           <input type="number" id="inp-qty" placeholder="e.g. 5" min="0.01" step="any" inputmode="decimal" maxlength="40" oninput="calcSellingPrice()">
         </div>
       </div>
@@ -1228,6 +1255,93 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
     <div class="modal-actions">
       <button class="ob-btn" onclick="applyBizChange()">Apply</button>
       <button class="ob-btn-ghost" onclick="closeBizModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SALE BUILDER MODAL ══ -->
+<div class="edit-modal-overlay" id="sale-modal" style="display:none">
+  <div class="edit-modal-card" style="max-width:500px;max-height:90vh;overflow-y:auto">
+    <h3>🛒 New Sale</h3>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--ink3);margin-bottom:16px;line-height:1.6">Add each product the customer is buying, then save to record all items at once.</p>
+
+    <!-- Customer name (optional) -->
+    <div class="field" style="margin-bottom:12px">
+      <label class="field-label">Customer name <span style="color:var(--ink3)">(optional — appears on receipt)</span></label>
+      <input class="field-input" id="sale-customer" placeholder="e.g. Aminata Kamara" maxlength="60">
+    </div>
+
+    <!-- Line items list -->
+    <div id="sale-items-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px"></div>
+
+    <!-- Add item row -->
+    <div style="background:var(--paper3);border:1px solid var(--rule2);border-radius:var(--radius);padding:14px;margin-bottom:14px">
+      <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:10px">Add item</div>
+
+      <!-- Product picker (from inventory) -->
+      <div class="field" style="margin-bottom:8px">
+        <label class="field-label">Pick a Product</label>
+        <select id="sale-prod-select" onchange="_selectSaleProduct(this.value)"
+          style="width:100%;background:var(--paper);border:1px solid var(--rule2);border-radius:var(--radius);padding:9px 12px;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"8\" viewBox=\"0 0 12 8\"><path d=\"M1 1l5 5 5-5\" stroke=\"%236a8f6d\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:32px">
+          <option value="">— Select a product —</option>
+        </select>
+      </div>
+      <!-- Selected product info bar -->
+      <div id="sale-prod-info" style="display:none;background:var(--paper);border:1px solid var(--rule2);border-radius:var(--radius);padding:9px 12px;margin-bottom:10px;font-family:var(--mono);font-size:12px;color:var(--ink2)"></div>
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div class="field" style="flex:1;min-width:120px;margin-bottom:0">
+          <label class="field-label">Amount (Le)</label>
+          <input class="field-input" type="number" id="sale-item-amount" placeholder="0" min="1" step="any" inputmode="decimal" style="margin-bottom:0">
+        </div>
+        <div class="field" style="flex:1;min-width:100px;margin-bottom:0">
+          <label class="field-label">Qty <span style="color:var(--red)">*required</span></label>
+          <input class="field-input" type="number" id="sale-item-qty" placeholder="e.g. 2" min="0.01" step="any" inputmode="decimal" style="margin-bottom:0">
+        </div>
+      </div>
+      <div class="error-msg" id="sale-item-err" style="margin-top:6px"></div>
+      <button class="hdr-btn" onclick="saleAddItem()" style="margin-top:10px;background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;width:100%">+ Add to Sale</button>
+    </div>
+
+    <!-- Running total -->
+    <div id="sale-total-row" style="display:none;background:var(--ink);color:var(--paper);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.7">Total</span>
+      <span style="font-family:var(--mono);font-size:18px;font-weight:700" id="sale-total-val">Le 0</span>
+    </div>
+
+    <div class="error-msg" id="sale-err" style="margin-bottom:8px"></div>
+    <div class="modal-actions">
+      <button class="ob-btn" onclick="saleSave()" id="sale-save-btn" disabled style="opacity:.5">Record Sale ↵</button>
+      <button class="ob-btn-ghost" onclick="closeSaleBuilder()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BUSINESS PROFILE MODAL ══ -->
+<div class="edit-modal-overlay" id="profile-modal" style="display:none">
+  <div class="edit-modal-card" style="max-width:420px">
+    <h3>Business Profile</h3>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--ink3);margin-bottom:16px;line-height:1.6">This information appears on all your invoices and receipts.</p>
+    <div class="field">
+      <label class="field-label">Business Name</label>
+      <input class="field-input" id="prof-bizname" placeholder="e.g. Fatima's Boutique" maxlength="50">
+    </div>
+    <div class="field">
+      <label class="field-label">📞 Contact / Phone</label>
+      <input class="field-input" id="prof-phone" placeholder="e.g. +232 76 000 000" maxlength="30">
+    </div>
+    <div class="field">
+      <label class="field-label">✉️ Email address</label>
+      <input class="field-input" id="prof-email" placeholder="e.g. fatima@email.com" maxlength="60" type="email">
+    </div>
+    <div class="field">
+      <label class="field-label">📍 Physical address</label>
+      <input class="field-input" id="prof-address" placeholder="e.g. 14 Siaka Stevens Street, Freetown" maxlength="100">
+    </div>
+    <div class="error-msg" id="prof-err"></div>
+    <div class="modal-actions">
+      <button class="ob-btn" onclick="saveProfile()">Save</button>
+      <button class="ob-btn-ghost" onclick="closeProfileModal()">Cancel</button>
     </div>
   </div>
 </div>
@@ -2087,6 +2201,8 @@ function renderDebtors(){
           <div style="margin-top:6px">${statusBadge}</div>
         </div>
         <div class="debtor-card-actions">
+          <button class="hdr-btn" onclick="printInvoice(${d.id})" title="Print Invoice" style="font-size:11px;padding:4px 10px">🧾 Invoice</button>
+          <button class="hdr-btn" onclick="printReceipt(${d.id})" title="Print Receipt" style="font-size:11px;padding:4px 10px">🖨 Receipt</button>
           <button class="del-row" onclick="deleteDebtor(${d.id})" title="Delete debtor" style="font-size:18px">×</button>
         </div>
       </div>
@@ -2109,6 +2225,423 @@ function renderDebtors(){
       </div>`:''}`;
     cards.appendChild(card);
   });
+}
+
+// ══════════ INVOICE PRINT ══════════
+function printInvoice(debtorId){
+  const debtors = getDebtors();
+  const d = debtors.find(x => x.id === debtorId);
+  if(!d) return;
+
+  const s = getSettings() || {};
+  const bizName = s.bizName || 'My Business';
+  const BUSINESSES_LOCAL = typeof BUSINESSES !== 'undefined' ? BUSINESSES : [];
+  const biz = BUSINESSES_LOCAL.find(b => b.id === s.bizId) || {};
+  const bizIcon = biz.icon || '';
+  const bizType = biz.name || '';
+  const bizPhone = s.phone || '';
+  const bizEmail = s.email || '';
+  const bizAddress = s.address || '';
+
+  const invoiceNum = 'INV-' + String(d.id).padStart(4,'0') + '-' + new Date().getFullYear();
+  const today = new Date().toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+
+  // Collect all credit sales
+  const credits = d.credits || [];
+  // Collect all payments received
+  const payments = d.payments || [];
+  // Collect all returns
+  const returns = d.returns || [];
+
+  const totalOwed = credits.reduce((s,c) => s + c.amount, 0);
+  const totalPaid = payments.reduce((s,p) => s + p.amount, 0);
+  const totalReturns = returns.reduce((s,r) => s + r.amount, 0);
+  const balance = totalOwed - totalPaid - totalReturns;
+
+  const fmt2 = n => 'Le ' + Math.round(Math.abs(n)).toLocaleString('en');
+
+  // Build credit lines table
+  let creditLines = '';
+  if(credits.length){
+    creditLines = credits.map((c,i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td>${new Date(c.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'})}</td>
+        <td>${c.note || 'Sale'}</td>
+        <td style="text-align:right">${fmt2(c.amount)}</td>
+      </tr>`).join('');
+  } else {
+    creditLines = `<tr><td colspan="4" style="text-align:center;color:#888;font-style:italic">No itemised credit sales recorded</td></tr>`;
+  }
+
+  // Build payments section
+  let paymentLines = '';
+  if(payments.length){
+    paymentLines = payments.map(p => `
+      <tr>
+        <td>${new Date(p.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'})}</td>
+        <td>${p.note || '—'}</td>
+        <td style="text-align:right;color:#1a5c1a">(${fmt2(p.amount)})</td>
+      </tr>`).join('');
+  }
+
+  // Build returns section
+  let returnLines = '';
+  if(returns.length){
+    returnLines = returns.map(r => `
+      <tr>
+        <td>${new Date(r.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'})}</td>
+        <td>${r.note || r.item || 'Return'}</td>
+        <td style="text-align:right;color:#2a6b2e">(${fmt2(r.amount)})</td>
+      </tr>`).join('');
+  }
+
+  const balanceColour = balance > 0 ? '#8b2222' : '#1a5c1a';
+  const balanceLabel = balance > 0 ? 'BALANCE DUE' : 'FULLY PAID';
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invoice – ${d.name}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Literata:ital,wght@0,400;1,400&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Literata',Georgia,serif;color:#1a2e1c;background:#fff;padding:0}
+  @media screen{body{padding:40px 20px;max-width:860px;margin:0 auto}}
+  .invoice-wrap{background:#fff;border:1px solid #c8bfa8;border-radius:8px;padding:48px 52px;max-width:760px;margin:0 auto}
+  @media print{
+    body{padding:0!important;background:#fff!important}
+    .invoice-wrap{border:none!important;border-radius:0!important;padding:30px 36px!important;max-width:100%!important;box-shadow:none!important}
+    .no-print{display:none!important}
+    @page{margin:15mm 18mm;size:A4 portrait}
+  }
+  /* Header */
+  .inv-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1a2e1c;padding-bottom:24px;margin-bottom:28px;gap:20px;flex-wrap:wrap}
+  .inv-biz-name{font-family:'DM Serif Display',Georgia,serif;font-size:28px;font-style:italic;color:#1a2e1c;line-height:1.1;margin-bottom:4px}
+  .inv-biz-sub{font-family:'DM Mono',monospace;font-size:10px;color:#6a8f6d;letter-spacing:.1em;text-transform:uppercase}
+  .inv-label{font-family:'DM Serif Display',Georgia,serif;font-size:38px;font-style:italic;color:#3a5c3d;text-align:right;line-height:1}
+  .inv-meta-block{text-align:right;margin-top:6px}
+  .inv-meta-row{font-family:'DM Mono',monospace;font-size:11px;color:#6a8f6d;margin-bottom:3px}
+  .inv-meta-row strong{color:#1a2e1c}
+  /* Bill to */
+  .inv-bill-section{display:flex;gap:40px;margin-bottom:28px;flex-wrap:wrap}
+  .inv-bill-col{flex:1;min-width:160px}
+  .inv-col-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#6a8f6d;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c8bfa8}
+  .inv-col-name{font-family:'DM Serif Display',Georgia,serif;font-size:18px;font-style:italic;color:#1a2e1c;margin-bottom:2px}
+  .inv-col-meta{font-family:'DM Mono',monospace;font-size:10px;color:#6a8f6d}
+  /* Table */
+  table{width:100%;border-collapse:collapse;margin-bottom:20px}
+  th{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#6a8f6d;padding:7px 10px;text-align:left;border-bottom:1.5px solid #1a2e1c;border-top:1.5px solid #1a2e1c}
+  td{font-family:'DM Mono',monospace;font-size:11px;padding:8px 10px;border-bottom:1px solid #e4dcc8;color:#1a2e1c;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .tbl-lbl{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#6a8f6d;padding:10px 10px 4px;padding-top:16px}
+  /* Totals */
+  .totals-block{margin-left:auto;width:260px;border:1px solid #c8bfa8;border-radius:6px;overflow:hidden;margin-bottom:32px}
+  .totals-row{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;font-family:'DM Mono',monospace;font-size:11px;border-bottom:1px solid #e4dcc8}
+  .totals-row:last-child{border-bottom:none}
+  .totals-row.grand{background:#1a2e1c;color:#f5f0e8;font-weight:700;font-size:13px;border-bottom:none}
+  .totals-row.grand span:last-child{color:${balanceColour === '#8b2222' ? '#ffaaaa' : '#aaffbb'}}
+  /* Footer */
+  .inv-footer{border-top:1px solid #c8bfa8;padding-top:18px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px}
+  .inv-note{font-family:'Literata',Georgia,serif;font-size:11px;font-style:italic;color:#6a8f6d;max-width:320px;line-height:1.6}
+  .inv-stamp{font-family:'DM Mono',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;text-transform:uppercase}
+  /* Print button */
+  .print-btn{display:block;margin:24px auto 0;padding:13px 36px;background:#1a2e1c;color:#f5f0e8;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.04em;transition:opacity .15s}
+  .print-btn:hover{opacity:.85}
+</style>
+</head>
+<body>
+<div class="invoice-wrap">
+
+  <div class="inv-header">
+    <div>
+      <div class="inv-biz-name">${bizIcon ? bizIcon+' ' : ''}${d.name.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+      <div class="inv-biz-sub">Customer · Sierra Leone</div>
+    </div>
+    <div>
+      <div class="inv-label">Invoice</div>
+      <div class="inv-meta-block">
+        <div class="inv-meta-row">No. <strong>${invoiceNum}</strong></div>
+        <div class="inv-meta-row">Date <strong>${today}</strong></div>
+        <div class="inv-meta-row">Added <strong>${new Date(d.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'})}</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="inv-bill-section">
+    <div class="inv-bill-col">
+      <div class="inv-col-lbl">Bill To</div>
+      <div class="inv-col-name">${d.name.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+      ${d.note ? `<div class="inv-col-meta">${d.note.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>` : ''}
+    </div>
+    <div class="inv-bill-col">
+      <div class="inv-col-lbl">Issued By</div>
+      <div class="inv-col-name">${bizName.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+      ${bizType ? `<div class="inv-col-meta">${bizType}</div>` : ''}
+      <div class="inv-col-meta">Sierra Leone · Le</div>
+      ${bizPhone ? `<div class="inv-col-meta">📞 ${bizPhone}</div>` : ''}
+      ${bizEmail ? `<div class="inv-col-meta">✉️ ${bizEmail}</div>` : ''}
+      ${bizAddress ? `<div class="inv-col-meta">📍 ${bizAddress}</div>` : ''}
+    </div>
+  </div>
+
+  ${credits.length ? `
+  <table>
+    <thead>
+      <tr>
+        <th style="width:34px">#</th>
+        <th style="width:110px">Date</th>
+        <th>Description</th>
+        <th style="text-align:right;width:120px">Amount</th>
+      </tr>
+    </thead>
+    <tbody>${creditLines}</tbody>
+  </table>` : `<p style="font-family:'DM Mono',monospace;font-size:11px;color:#6a8f6d;font-style:italic;margin-bottom:20px">No itemised credit sales — balance carried from initial entry.</p>`}
+
+  ${(payments.length || returns.length) ? `
+  <table>
+    <thead>
+      <tr>
+        <th style="width:110px">Date</th>
+        <th>Description</th>
+        <th style="text-align:right;width:140px">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${payments.length ? `<tr><td colspan="3" class="tbl-lbl">Payments Received</td></tr>${paymentLines}` : ''}
+      ${returns.length ? `<tr><td colspan="3" class="tbl-lbl">Returns / Credits</td></tr>${returnLines}` : ''}
+    </tbody>
+  </table>` : ''}
+
+  <div class="totals-block">
+    ${totalOwed > 0 ? `<div class="totals-row"><span>Subtotal</span><span>${fmt2(totalOwed)}</span></div>` : ''}
+    ${totalReturns > 0 ? `<div class="totals-row"><span>Returns</span><span style="color:#2a6b2e">− ${fmt2(totalReturns)}</span></div>` : ''}
+    ${totalPaid > 0 ? `<div class="totals-row"><span>Payments</span><span style="color:#1a5c1a">− ${fmt2(totalPaid)}</span></div>` : ''}
+    <div class="totals-row grand"><span>${balanceLabel}</span><span>${fmt2(balance)}</span></div>
+  </div>
+
+  <div class="inv-footer">
+    <div class="inv-note">${balance > 0 ? 'Please settle the outstanding balance at your earliest convenience. Thank you for your business.' : 'This account is fully settled. Thank you!'}</div>
+    <div class="inv-stamp">Generated by FA Accountant · Sierra Leone<br>${today}</div>
+  </div>
+
+</div>
+<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+</body>
+</html>`;
+
+  const win = window.open('','_blank','width=860,height=780');
+  if(!win){ alert('Please allow pop-ups to view the invoice.'); return; }
+  win.document.write(html);
+  win.document.close();
+}
+
+// ══════════ RECEIPT PRINT ══════════
+function printReceipt(debtorId){
+  const debtors = getDebtors();
+  const d = debtors.find(x => x.id === debtorId);
+  if(!d) return;
+
+  const s = getSettings() || {};
+  const bizName = s.bizName || 'My Business';
+  const BUSINESSES_LOCAL = typeof BUSINESSES !== 'undefined' ? BUSINESSES : [];
+  const biz = BUSINESSES_LOCAL.find(b => b.id === s.bizId) || {};
+  const bizIcon = biz.icon || '';
+  const bizType = biz.name || '';
+  const bizPhone = s.phone || '';
+  const bizEmail = s.email || '';
+  const bizAddress = s.address || '';
+
+  const receiptNum = 'RCP-' + String(d.id).padStart(4,'0') + '-' + Date.now().toString().slice(-5);
+  const today = new Date().toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const todayTime = new Date().toLocaleTimeString('en-SL',{hour:'2-digit',minute:'2-digit'});
+
+  const payments = d.payments || [];
+  const credits  = d.credits  || [];
+  const returns  = d.returns  || [];
+
+  const totalOwed    = credits.reduce((s,c)  => s + c.amount, 0);
+  const totalPaid    = payments.reduce((s,p) => s + p.amount, 0);
+  const totalReturns = returns.reduce((s,r)  => s + r.amount, 0);
+  const balance      = totalOwed - totalPaid - totalReturns;
+
+  const fmt2 = n => 'Le ' + Math.round(Math.abs(n)).toLocaleString('en');
+
+  // Most recent payment for the "received today" highlight
+  const lastPayment = payments.length ? payments[payments.length - 1] : null;
+
+  // Payment rows
+  const paymentRows = payments.length
+    ? payments.map(p => `
+        <tr>
+          <td>${new Date(p.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'})}</td>
+          <td>${p.note ? p.note.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>') : 'Payment received'}</td>
+          <td style="text-align:right;font-weight:600">${fmt2(p.amount)}</td>
+        </tr>`).join('')
+    : `<tr><td colspan="3" style="text-align:center;color:#888;font-style:italic;padding:12px 0">No payments recorded yet</td></tr>`;
+
+  const balanceColour = balance > 0 ? '#8b2222' : '#1a5c1a';
+  const statusText    = balance > 0 ? 'BALANCE OUTSTANDING' : '✓ ACCOUNT SETTLED';
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Receipt – ${d.name}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=Literata:ital,wght@0,400;1,400&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Mono',monospace;color:#1a2e1c;background:#f5f0e8}
+  @media screen{body{padding:40px 20px;display:flex;flex-direction:column;align-items:center}}
+  .receipt-outer{background:#fff;max-width:420px;width:100%;border-radius:4px 4px 0 0;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+  /* Serrated bottom edge */
+  .receipt-outer::after{content:'';display:block;height:16px;background:
+    radial-gradient(circle at 8px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 24px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 40px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 56px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 72px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 88px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 104px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 120px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 136px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 152px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 168px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 184px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 200px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 216px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 232px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 248px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 264px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 280px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 296px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 312px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 328px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 344px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 360px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 376px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 392px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 408px 0,#f5f0e8 6px,transparent 7px);
+    background-size:16px 16px;background-position:0 0;background-color:#fff}
+  @media print{
+    body{padding:0!important;background:#fff!important;display:block}
+    .receipt-outer{box-shadow:none!important;max-width:100%!important;border-radius:0!important}
+    .receipt-outer::after{display:none!important}
+    .no-print{display:none!important}
+    @page{margin:8mm 10mm;size:80mm auto}
+  }
+  /* Inner padding */
+  .rcp-inner{padding:28px 28px 20px}
+  /* Top banner */
+  .rcp-biz{text-align:center;border-bottom:1px dashed #c8bfa8;padding-bottom:16px;margin-bottom:16px}
+  .rcp-biz-name{font-family:'DM Serif Display',Georgia,serif;font-size:22px;font-style:italic;color:#1a2e1c;line-height:1.1;margin-bottom:2px}
+  .rcp-biz-sub{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a8f6d;margin-bottom:6px}
+  .rcp-num-row{font-size:9px;color:#aaa;letter-spacing:.06em}
+  /* Customer */
+  .rcp-cust-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:8px}
+  .rcp-cust-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#6a8f6d;margin-bottom:3px}
+  .rcp-cust-name{font-family:'DM Serif Display',Georgia,serif;font-size:16px;font-style:italic;color:#1a2e1c}
+  .rcp-cust-note{font-size:9px;color:#6a8f6d;margin-top:1px}
+  .rcp-date-block{text-align:right}
+  .rcp-date{font-size:10px;color:#1a2e1c;font-weight:600}
+  .rcp-time{font-size:9px;color:#aaa;margin-top:1px}
+  /* Divider */
+  .dashed{border:none;border-top:1px dashed #c8bfa8;margin:12px 0}
+  /* Table */
+  .rcp-table{width:100%;border-collapse:collapse;margin-bottom:4px;font-size:10px}
+  .rcp-table th{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:#6a8f6d;padding:4px 0;border-bottom:1px solid #e4dcc8;text-align:left}
+  .rcp-table th:last-child{text-align:right}
+  .rcp-table td{padding:5px 0;border-bottom:1px dashed #e4dcc8;color:#1a2e1c;vertical-align:top}
+  .rcp-table tr:last-child td{border-bottom:none}
+  /* Totals */
+  .rcp-totals{margin-top:8px}
+  .rcp-total-row{display:flex;justify-content:space-between;font-size:10px;padding:4px 0;color:#3a5c3d}
+  .rcp-total-row.bold{font-weight:700;font-size:11px;color:#1a2e1c;border-top:1px solid #c8bfa8;padding-top:8px;margin-top:4px}
+  /* Status stamp */
+  .rcp-stamp{text-align:center;margin:20px 0 10px;font-size:12px;font-weight:700;letter-spacing:.08em;padding:10px 0;border-top:1px dashed #c8bfa8;border-bottom:1px dashed #c8bfa8;color:${balanceColour}}
+  /* Last payment highlight */
+  .rcp-last-pay{background:#f0fff4;border:1px solid #aaddaa;border-radius:4px;padding:10px 12px;margin-bottom:12px;text-align:center}
+  .rcp-last-pay-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#2a6b2e;margin-bottom:3px}
+  .rcp-last-pay-amt{font-family:'DM Serif Display',Georgia,serif;font-size:26px;font-style:italic;color:#1a5c1a}
+  /* Footer */
+  .rcp-footer{text-align:center;font-size:8px;color:#aaa;letter-spacing:.06em;text-transform:uppercase;margin-top:10px;line-height:1.8}
+  /* Print button */
+  .print-btn{display:block;margin:20px auto 0;padding:12px 32px;background:#1a2e1c;color:#f5f0e8;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.04em;transition:opacity .15s}
+  .print-btn:hover{opacity:.85}
+</style>
+</head>
+<body>
+<div class="receipt-outer">
+  <div class="rcp-inner">
+
+    <div class="rcp-biz">
+      <div class="rcp-biz-name">${bizIcon ? bizIcon+' ' : ''}${bizName.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+      <div class="rcp-biz-sub">${bizType || 'Business'} · Sierra Leone</div>
+      ${bizPhone ? `<div class="rcp-num-row">${bizPhone}</div>` : ''}
+      ${bizEmail ? `<div class="rcp-num-row">${bizEmail}</div>` : ''}
+      ${bizAddress ? `<div class="rcp-num-row">${bizAddress}</div>` : ''}
+      <div class="rcp-num-row">Receipt ${receiptNum}</div>
+    </div>
+
+    <div class="rcp-cust-row">
+      <div>
+        <div class="rcp-cust-lbl">Customer</div>
+        <div class="rcp-cust-name">${d.name.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+        ${d.note ? `<div class="rcp-cust-note">${d.note.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>` : ''}
+      </div>
+      <div class="rcp-date-block">
+        <div class="rcp-date">${today}</div>
+        <div class="rcp-time">${todayTime}</div>
+      </div>
+    </div>
+
+    ${lastPayment ? `
+    <div class="rcp-last-pay">
+      <div class="rcp-last-pay-lbl">Last Payment Received</div>
+      <div class="rcp-last-pay-amt">${fmt2(lastPayment.amount)}</div>
+      ${lastPayment.note ? `<div style="font-size:9px;color:#2a6b2e;margin-top:2px">${lastPayment.note.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>` : ''}
+      <div style="font-size:9px;color:#6a8f6d;margin-top:1px">${new Date(lastPayment.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'})}</div>
+    </div>` : ''}
+
+    ${payments.length ? `
+    <table class="rcp-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Note</th>
+          <th style="text-align:right">Amount</th>
+        </tr>
+      </thead>
+      <tbody>${paymentRows}</tbody>
+    </table>` : `<p style="font-size:10px;color:#aaa;font-style:italic;text-align:center;padding:10px 0">No payments recorded yet</p>`}
+
+    <div class="rcp-totals">
+      ${totalOwed > 0 ? `<div class="rcp-total-row"><span>Total Charged</span><span>${fmt2(totalOwed)}</span></div>` : ''}
+      ${totalReturns > 0 ? `<div class="rcp-total-row"><span>Returns</span><span style="color:#2a6b2e">− ${fmt2(totalReturns)}</span></div>` : ''}
+      <div class="rcp-total-row bold"><span>Total Paid</span><span style="color:#1a5c1a">${fmt2(totalPaid)}</span></div>
+      ${balance > 0 ? `<div class="rcp-total-row bold" style="color:#8b2222"><span>Remaining</span><span>${fmt2(balance)}</span></div>` : ''}
+    </div>
+
+    <div class="rcp-stamp">${statusText}</div>
+
+    <div class="rcp-footer">
+      Thank you for your business<br>
+      FA Accountant · Sierra Leone · ${today}
+    </div>
+
+  </div>
+</div>
+<button class="print-btn no-print" onclick="window.print()">🖨 Print Receipt</button>
+</body>
+</html>`;
+
+  const win = window.open('','_blank','width=500,height=720');
+  if(!win){ alert('Please allow pop-ups to view the receipt.'); return; }
+  win.document.write(html);
+  win.document.close();
 }
 
 // ══════════ ONBOARDING ══════════
@@ -2136,6 +2669,8 @@ function obNext(step){
     const name=document.getElementById('ob-bizname').value.trim();
     if(!name){ document.getElementById('ob-err1').textContent='Please enter your business name.'; return; }
     document.getElementById('ob-err1').textContent=''; showObStep(2);
+  } else if(step===2){
+    showObStep(3);
   }
 }
 function obBack(n){ showObStep(n); }
@@ -2145,7 +2680,10 @@ function showObStep(n){
 }
 function obFinish(){
   const name=document.getElementById('ob-bizname').value.trim();
-  saveSettings({bizId:obBizId,bizName:name,lang:obLang});
+  const phone=((document.getElementById('ob-phone')||{}).value||'').trim();
+  const email=((document.getElementById('ob-email')||{}).value||'').trim();
+  const address=((document.getElementById('ob-address')||{}).value||'').trim();
+  saveSettings({bizId:obBizId,bizName:name,lang:obLang,phone,email,address});
   lang=obLang;
   document.getElementById('onboarding').style.display='none';
   document.getElementById('app').style.display='';
@@ -2224,7 +2762,7 @@ function setType(type){
   const spd      = document.getElementById('selling-price-display');
   if(type === 'income'){
     if(amtLabel) amtLabel.textContent = 'Total Amount Received (Le)';
-    if(qtyLabel) qtyLabel.innerHTML = 'Quantity Sold <span style="color:var(--ink3)" id="lbl-qty-optional">(optional)</span>';
+    if(qtyLabel) qtyLabel.innerHTML = 'Quantity Sold <span style="color:var(--red)" id="lbl-qty-optional">* required</span>';
     if(qtyInput){ qtyInput.type='number'; qtyInput.placeholder='e.g. 5'; qtyInput.setAttribute('inputmode','decimal'); }
     const csw = document.getElementById('credit-sale-wrap'); if(csw) csw.style.display = '';
   } else {
@@ -2367,6 +2905,14 @@ function submitEntry(){
   if(!rawAmt||isNaN(amount)||amount<=0){ errEl.textContent=t('enterAmountErr'); return; }
   if(amount>1000000000){ errEl.textContent='Amount too large.'; return; }
 
+  // ── Qty required for all income entries ──
+  if(selectedType==='income'){
+    const qtyCheck = parseFloat(qtyRawStr);
+    if(!qtyRawStr || isNaN(qtyCheck) || qtyCheck <= 0){
+      errEl.textContent = 'Quantity is required for all sales.'; return;
+    }
+  }
+
   // ── Credit sale validation ──
   const isCreditSale = selectedType==='income' && document.getElementById('inp-credit-sale')?.checked;
   let creditDebtorId = null;
@@ -2427,18 +2973,23 @@ function submitEntry(){
       showEntryStep(2);
       return;
     }
-    if(qtyNum){
-      // Oversell guard: block if qty sold > units in stock
-      if(matched2 && qtyNum > matched2.totalUnits){
-        saveRecords(getRecords().filter(r=>r.id!==entry.id));
-        errEl.textContent = 'Insufficient stock! Only ' + matched2.totalUnits.toLocaleString()
-          + ' ' + matched2.unitLabel + 's available but you tried to sell ' + qtyNum
-          + '. Reduce the quantity or top up stock first.';
-        showEntryStep(2);
-        return;
-      }
-      invDeductOnSale(item, String(qtyNum), amount);
+    // Qty is required for inventory-tracked products so COGS records correctly
+    if(!qtyNum || qtyNum <= 0){
+      saveRecords(getRecords().filter(r=>r.id!==entry.id));
+      errEl.textContent = 'Please enter a quantity — it is required to calculate cost of goods sold for inventory-tracked products.';
+      showEntryStep(2);
+      return;
     }
+    // Oversell guard: block if qty sold > units in stock
+    if(matched2 && qtyNum > matched2.totalUnits){
+      saveRecords(getRecords().filter(r=>r.id!==entry.id));
+      errEl.textContent = 'Insufficient stock! Only ' + matched2.totalUnits.toLocaleString()
+        + ' ' + matched2.unitLabel + 's available but you tried to sell ' + qtyNum
+        + '. Reduce the quantity or top up stock first.';
+      showEntryStep(2);
+      return;
+    }
+    invDeductOnSale(item, String(qtyNum), amount);
   }
 
   // ── Link to debtor (credit sale) ──
@@ -2549,6 +3100,30 @@ function openBizModal(){
   document.getElementById('biz-modal').classList.add('open');
 }
 function closeBizModal(){ document.getElementById('biz-modal').classList.remove('open'); }
+
+function openProfileModal(){
+  const s=getSettings()||{};
+  document.getElementById('prof-bizname').value = s.bizName||'';
+  document.getElementById('prof-phone').value   = s.phone||'';
+  document.getElementById('prof-email').value   = s.email||'';
+  document.getElementById('prof-address').value = s.address||'';
+  document.getElementById('prof-err').textContent='';
+  document.getElementById('profile-modal').style.display='flex';
+}
+function closeProfileModal(){ document.getElementById('profile-modal').style.display='none'; }
+function saveProfile(){
+  const name=(document.getElementById('prof-bizname').value||'').trim();
+  if(!name){ document.getElementById('prof-err').textContent='Business name is required.'; return; }
+  const s=getSettings()||{};
+  s.bizName  = name;
+  s.phone    = (document.getElementById('prof-phone').value||'').trim();
+  s.email    = (document.getElementById('prof-email').value||'').trim();
+  s.address  = (document.getElementById('prof-address').value||'').trim();
+  saveSettings(s);
+  document.getElementById('hdr-title').textContent=name;
+  closeProfileModal();
+  toast('Business profile updated ✓');
+}
 function applyBizChange(){
   if(!modalBizId) return;
   const s=getSettings(); s.bizId=modalBizId; saveSettings(s);
@@ -2666,11 +3241,708 @@ function render(newId){
       : '';
     const itemLine=[esc(r.item), qtyPart].filter(Boolean).join(' · ');
     const noteLine=r.note?`<br><span style="font-family:var(--mono);font-size:10px;color:var(--ink3)">${esc(r.note)}</span>`:'';
-    tr.innerHTML=`<td class="date">${fmtDate(r.date)}</td><td>${itemLine}${spLine}${noteLine}</td><td><span class="cat-pill">${esc(r.category)}</span></td><td>${badge}</td><td class="num ${cls}">${sign}&nbsp;${fmt(r.amount)}</td><td style="white-space:nowrap"><button class="del-row" onclick="editRow(${r.id})" title="Edit" style="color:var(--ink3);font-size:13px;margin-right:2px">✎</button><button class="del-row" onclick="deleteRow(${r.id})" title="Delete">×</button></td>`;
+    const txnDocBtn = r._saleGroup
+      ? `<button class="del-row" onclick="printGroupInvoice('${r._saleGroup}')" title="Print Sale Invoice" style="color:var(--ink3);font-size:11px;margin-right:2px">🧾</button><button class="del-row" onclick="printGroupReceipt('${r._saleGroup}')" title="Print Sale Receipt" style="color:var(--ink3);font-size:11px;margin-right:2px">🖨</button>`
+      : (r.type==='income' && !r._debtorPayment)
+        ? `<button class="del-row" onclick="printTxnInvoice(${r.id})" title="Print Invoice" style="color:var(--ink3);font-size:11px;margin-right:2px">🧾</button><button class="del-row" onclick="printTxnReceipt(${r.id})" title="Print Receipt" style="color:var(--ink3);font-size:11px;margin-right:2px">🖨</button>`
+        : (r.type==='expense' && !r._drawing && !r._supplierPayment && !r._openingStock)
+          ? `<button class="del-row" onclick="printTxnReceipt(${r.id})" title="Print Receipt" style="color:var(--ink3);font-size:11px;margin-right:2px">🖨</button>`
+          : '';
+    tr.innerHTML=`<td class="date">${fmtDate(r.date)}</td><td>${itemLine}${spLine}${noteLine}</td><td><span class="cat-pill">${esc(r.category)}</span></td><td>${badge}</td><td class="num ${cls}">${sign}&nbsp;${fmt(r.amount)}</td><td style="white-space:nowrap">${txnDocBtn}<button class="del-row" onclick="editRow(${r.id})" title="Edit" style="color:var(--ink3);font-size:13px;margin-right:2px">✎</button><button class="del-row" onclick="deleteRow(${r.id})" title="Delete">×</button></td>`;
     tbody.appendChild(tr);
   });
 }
 
+
+// ══════════ TRANSACTION INVOICE & RECEIPT ══════════
+function _getTxnRecord(id){
+  return (getRecords()||[]).find(r=>r.id===id)||null;
+}
+
+function printTxnInvoice(recId){
+  const r = _getTxnRecord(recId);
+  if(!r) return;
+  const s = getSettings()||{};
+  const bizName = s.bizName || 'My Business';
+  const BUSINESSES_LOCAL = typeof BUSINESSES!=='undefined'?BUSINESSES:[];
+  const biz = BUSINESSES_LOCAL.find(b=>b.id===s.bizId)||{};
+  const bizType = biz.name||'';
+  const bizIcon = biz.icon||'';
+  const bizPhone = s.phone||'';
+  const bizEmail = s.email||'';
+  const bizAddress = s.address||'';
+
+  const invoiceNum = 'INV-TXN-' + String(recId).slice(-6);
+  const entryDate = new Date(r.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const today = new Date().toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const fmt2 = n=>'Le '+Math.round(Math.abs(n)).toLocaleString('en');
+
+  const qty = r.qty ? String(r.qty) : '';
+  const spLine = (r.sellingPricePerUnit && qty)
+    ? `<tr><td style="color:#6a8f6d">Unit Price</td><td style="text-align:right">${fmt2(r.sellingPricePerUnit)}</td></tr>
+       <tr><td style="color:#6a8f6d">Quantity</td><td style="text-align:right">${qty} units</td></tr>`
+    : qty ? `<tr><td style="color:#6a8f6d">Quantity</td><td style="text-align:right">${qty}</td></tr>` : '';
+
+  const creditNote = r._creditSale
+    ? `<div style="background:#fff3cd;border:1px solid #f0c14b;border-radius:4px;padding:10px 14px;margin-bottom:16px;font-family:'DM Mono',monospace;font-size:11px;color:#7a5800">⚠ Credit Sale — payment not yet received</div>`
+    : '';
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Invoice – ${invoiceNum}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Literata:ital,wght@0,400;1,400&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Literata',Georgia,serif;color:#1a2e1c;background:#fff}
+  @media screen{body{padding:40px 20px;max-width:860px;margin:0 auto}}
+  .invoice-wrap{background:#fff;border:1px solid #c8bfa8;border-radius:8px;padding:48px 52px;max-width:760px;margin:0 auto}
+  @media print{
+    body{padding:0!important}
+    .invoice-wrap{border:none!important;padding:30px 36px!important;max-width:100%!important}
+    .no-print{display:none!important}
+    @page{margin:15mm 18mm;size:A4 portrait}
+  }
+  .inv-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1a2e1c;padding-bottom:24px;margin-bottom:28px;gap:20px;flex-wrap:wrap}
+  .inv-biz-name{font-family:'DM Serif Display',Georgia,serif;font-size:28px;font-style:italic;color:#1a2e1c;margin-bottom:4px}
+  .inv-biz-sub{font-family:'DM Mono',monospace;font-size:10px;color:#6a8f6d;letter-spacing:.1em;text-transform:uppercase}
+  .inv-label{font-family:'DM Serif Display',Georgia,serif;font-size:38px;font-style:italic;color:#3a5c3d;text-align:right}
+  .inv-meta-row{font-family:'DM Mono',monospace;font-size:11px;color:#6a8f6d;margin-top:4px;text-align:right}
+  .inv-meta-row strong{color:#1a2e1c}
+  .inv-col-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#6a8f6d;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c8bfa8}
+  .inv-col-name{font-family:'DM Serif Display',Georgia,serif;font-size:18px;font-style:italic;color:#1a2e1c;margin-bottom:2px}
+  .inv-col-meta{font-family:'DM Mono',monospace;font-size:10px;color:#6a8f6d}
+  table{width:100%;border-collapse:collapse;margin-bottom:20px}
+  th{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#6a8f6d;padding:7px 10px;text-align:left;border-bottom:1.5px solid #1a2e1c;border-top:1.5px solid #1a2e1c}
+  td{font-family:'DM Mono',monospace;font-size:11px;padding:8px 10px;border-bottom:1px solid #e4dcc8;color:#1a2e1c}
+  tr:last-child td{border-bottom:none}
+  .totals-block{margin-left:auto;width:240px;border:1px solid #c8bfa8;border-radius:6px;overflow:hidden;margin-bottom:28px}
+  .totals-row{display:flex;justify-content:space-between;padding:9px 14px;font-family:'DM Mono',monospace;font-size:11px;border-bottom:1px solid #e4dcc8}
+  .totals-row:last-child{border-bottom:none;background:#1a2e1c;color:#f5f0e8;font-weight:700;font-size:13px}
+  .inv-footer{border-top:1px solid #c8bfa8;padding-top:16px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px}
+  .inv-note{font-family:'Literata',Georgia,serif;font-size:11px;font-style:italic;color:#6a8f6d;max-width:320px;line-height:1.6}
+  .inv-stamp{font-family:'DM Mono',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;text-transform:uppercase}
+  .print-btn{display:block;margin:24px auto 0;padding:13px 36px;background:#1a2e1c;color:#f5f0e8;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s}
+  .print-btn:hover{opacity:.85}
+</style>
+</head>
+<body>
+<div class="invoice-wrap">
+  <div class="inv-header">
+    <div>
+      <div class="inv-biz-name">${bizIcon?bizIcon+' ':''}${bizName.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+      <div class="inv-biz-sub">${bizType||'Business'} · Sierra Leone</div>
+    </div>
+    <div>
+      <div class="inv-label">Invoice</div>
+      <div class="inv-meta-row">No. <strong>${invoiceNum}</strong></div>
+      <div class="inv-meta-row">Date <strong>${entryDate}</strong></div>
+      <div class="inv-meta-row">Printed <strong>${today}</strong></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:40px;margin-bottom:28px;flex-wrap:wrap">
+    <div style="flex:1;min-width:160px">
+      <div class="inv-col-lbl">Sold By</div>
+      <div class="inv-col-name">${bizName.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+      ${bizType?`<div class="inv-col-meta">${bizType}</div>`:''}
+      <div class="inv-col-meta">Sierra Leone · Le</div>
+      ${bizPhone?`<div class="inv-col-meta">📞 ${bizPhone}</div>`:''}
+      ${bizEmail?`<div class="inv-col-meta">✉️ ${bizEmail}</div>`:''}
+      ${bizAddress?`<div class="inv-col-meta">📍 ${bizAddress}</div>`:''}
+    </div>
+    <div style="flex:1;min-width:160px">
+      <div class="inv-col-lbl">Category</div>
+      <div class="inv-col-name" style="font-size:15px">${(r.category||'—').replace(/&amp;/g,'&')}</div>
+      <div class="inv-col-meta">${r._creditSale?'Credit Sale':'Cash Sale'}</div>
+    </div>
+  </div>
+
+  ${creditNote}
+
+  <table>
+    <thead>
+      <tr><th>Item / Description</th><th style="text-align:right">Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>${(r.item||'Sale').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}${r.note?`<br><span style="font-size:10px;color:#6a8f6d">${r.note.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</span>`:''}
+        </td>
+        <td style="text-align:right">${fmt2(r.amount)}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="totals-block">
+    ${spLine?`<table style="margin:0;border:none"><tbody>${spLine}</tbody></table>`:''}
+    <div class="totals-row"><span>Total</span><span>${fmt2(r.amount)}</span></div>
+  </div>
+
+  <div class="inv-footer">
+    <div class="inv-note">${r._creditSale?'Payment is outstanding for this credit sale.':'Thank you for your business.'}</div>
+    <div class="inv-stamp">FA Accountant · Sierra Leone<br>${today}</div>
+  </div>
+</div>
+<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+</body>
+</html>`;
+
+  const win=window.open('','_blank','width=860,height=720');
+  if(!win){alert('Please allow pop-ups to view the invoice.');return;}
+  win.document.write(html); win.document.close();
+}
+
+function printTxnReceipt(recId){
+  const r = _getTxnRecord(recId);
+  if(!r) return;
+  const s = getSettings()||{};
+  const bizName = s.bizName||'My Business';
+  const BUSINESSES_LOCAL = typeof BUSINESSES!=='undefined'?BUSINESSES:[];
+  const biz = BUSINESSES_LOCAL.find(b=>b.id===s.bizId)||{};
+  const bizType = biz.name||'';
+  const bizIcon = biz.icon||'';
+  const bizPhone = s.phone||'';
+  const bizEmail = s.email||'';
+  const bizAddress = s.address||'';
+
+  const receiptNum = 'RCP-TXN-' + String(recId).slice(-5);
+  const entryDate = new Date(r.date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const entryTime = new Date(r.date).toLocaleTimeString('en-SL',{hour:'2-digit',minute:'2-digit'});
+  const today = new Date().toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const fmt2 = n=>'Le '+Math.round(Math.abs(n)).toLocaleString('en');
+
+  const isIncome = r.type==='income';
+  const typeLabel = r._creditSale ? 'Credit Sale' : isIncome ? 'Sale / Income' : r._drawing ? 'Owner Drawing' : 'Expense / Purchase';
+  const amtColour = isIncome ? '#1a5c1a' : '#8b2222';
+  const sign = isIncome ? '+' : '−';
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Receipt – ${receiptNum}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&family=Literata:ital,wght@0,400;1,400&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Mono',monospace;color:#1a2e1c;background:#f5f0e8}
+  @media screen{body{padding:40px 20px;display:flex;flex-direction:column;align-items:center}}
+  .receipt-outer{background:#fff;max-width:420px;width:100%;border-radius:4px 4px 0 0;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+  .receipt-outer::after{content:'';display:block;height:16px;background:
+    radial-gradient(circle at 8px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 24px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 40px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 56px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 72px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 88px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 104px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 120px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 136px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 152px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 168px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 184px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 200px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 216px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 232px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 248px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 264px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 280px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 296px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 312px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 328px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 344px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 360px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 376px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 392px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 408px 0,#f5f0e8 6px,transparent 7px);
+    background-size:16px 16px;background-position:0 0;background-color:#fff}
+  @media print{
+    body{padding:0!important;background:#fff!important;display:block}
+    .receipt-outer{box-shadow:none!important;max-width:100%!important;border-radius:0!important}
+    .receipt-outer::after{display:none!important}
+    .no-print{display:none!important}
+    @page{margin:8mm 10mm;size:80mm auto}
+  }
+  .rcp-inner{padding:28px 28px 20px}
+  .rcp-biz{text-align:center;border-bottom:1px dashed #c8bfa8;padding-bottom:16px;margin-bottom:16px}
+  .rcp-biz-name{font-family:'DM Serif Display',Georgia,serif;font-size:22px;font-style:italic;color:#1a2e1c;margin-bottom:2px}
+  .rcp-biz-sub{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a8f6d;margin-bottom:4px}
+  .rcp-num{font-size:9px;color:#aaa;letter-spacing:.06em}
+  .row2{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;gap:8px}
+  .lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#6a8f6d;margin-bottom:2px}
+  .val{font-size:11px;color:#1a2e1c;font-weight:600}
+  .dashed{border:none;border-top:1px dashed #c8bfa8;margin:10px 0}
+  .amt-box{text-align:center;padding:16px 0 12px;border-bottom:1px dashed #c8bfa8;margin-bottom:12px}
+  .amt-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#6a8f6d;margin-bottom:4px}
+  .amt-val{font-family:'DM Serif Display',Georgia,serif;font-size:32px;font-style:italic;color:${amtColour}}
+  .detail-row{display:flex;justify-content:space-between;font-size:10px;padding:4px 0;border-bottom:1px dashed #e4dcc8;color:#3a5c3d}
+  .detail-row:last-child{border-bottom:none}
+  .rcp-footer{text-align:center;font-size:8px;color:#aaa;letter-spacing:.06em;text-transform:uppercase;margin-top:14px;line-height:1.8;border-top:1px dashed #c8bfa8;padding-top:10px}
+  .print-btn{display:block;margin:20px auto 0;padding:12px 32px;background:#1a2e1c;color:#f5f0e8;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+  .print-btn:hover{opacity:.85}
+</style>
+</head>
+<body>
+<div class="receipt-outer">
+  <div class="rcp-inner">
+
+    <div class="rcp-biz">
+      <div class="rcp-biz-name">${bizIcon?bizIcon+' ':''}${bizName.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</div>
+      <div class="rcp-biz-sub">${bizType||'Business'} · Sierra Leone</div>
+      ${bizPhone?`<div class="rcp-num">${bizPhone}</div>`:''}
+      ${bizEmail?`<div class="rcp-num">${bizEmail}</div>`:''}
+      ${bizAddress?`<div class="rcp-num">${bizAddress}</div>`:''}
+      <div class="rcp-num">${receiptNum}</div>
+    </div>
+
+    <div class="row2">
+      <div><div class="lbl">Date</div><div class="val">${entryDate}</div><div style="font-size:9px;color:#aaa">${entryTime}</div></div>
+      <div style="text-align:right"><div class="lbl">Type</div><div class="val">${typeLabel}</div></div>
+    </div>
+
+    <div class="amt-box">
+      <div class="amt-lbl">${isIncome?'Amount Received':'Amount Paid'}</div>
+      <div class="amt-val">${sign} ${fmt2(r.amount)}</div>
+    </div>
+
+    <div class="detail-row"><span>Item</span><span>${(r.item||'—').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</span></div>
+    <div class="detail-row"><span>Category</span><span>${(r.category||'—').replace(/&amp;/g,'&')}</span></div>
+    ${r.qty?`<div class="detail-row"><span>Qty</span><span>${r.qty}</span></div>`:''}
+    ${r.sellingPricePerUnit?`<div class="detail-row"><span>Unit Price</span><span>${fmt2(r.sellingPricePerUnit)}</span></div>`:''}
+    ${r.note?`<div class="detail-row"><span>Note</span><span style="max-width:180px;text-align:right">${r.note.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}</span></div>`:''}
+
+    <div class="rcp-footer">
+      ${isIncome?'Thank you for your payment':'Expense recorded'}<br>
+      FA Accountant · Sierra Leone · ${today}
+    </div>
+
+  </div>
+</div>
+<button class="print-btn no-print" onclick="window.print()">🖨 Print Receipt</button>
+</body>
+</html>`;
+
+  const win=window.open('','_blank','width=500,height=620');
+  if(!win){alert('Please allow pop-ups to view the receipt.');return;}
+  win.document.write(html); win.document.close();
+}
+
+// ══════════ SALE BUILDER ══════════
+let _saleItems = [];       // [{item, category, amount, qty, sellingPricePerUnit}]
+let _saleCatSelected = null;
+
+function openSaleBuilder(){
+  _saleItems = [];
+  _saleCatSelected = null;
+  _saleSelectedProduct = null;
+  document.getElementById('sale-customer').value = '';
+  document.getElementById('sale-item-amount').value = '';
+  document.getElementById('sale-item-qty').value = '';
+  document.getElementById('sale-item-err').textContent = '';
+  document.getElementById('sale-err').textContent = '';
+  document.getElementById('sale-prod-info').style.display = 'none';
+  _renderSaleItems();
+  _buildSaleProdPicker();
+  document.getElementById('sale-modal').style.display = 'flex';
+}
+
+function closeSaleBuilder(){
+  _saleSelectedProduct = null;
+  document.getElementById('sale-modal').style.display = 'none';
+}
+
+// _saleSelectedProduct: the currently picked inventory item object (or null)
+let _saleSelectedProduct = null;
+
+function _buildSaleProdPicker(){
+  const inv = (typeof getInventory === 'function') ? getInventory() : [];
+  const sel  = document.getElementById('sale-prod-select');
+  const info = document.getElementById('sale-prod-info');
+  _saleSelectedProduct = null;
+  info.style.display = 'none';
+  // Rebuild options
+  sel.innerHTML = '<option value="">— Select a product —</option>';
+  if(!inv.length){
+    sel.innerHTML += '<option value="" disabled>No inventory — add stock via 🗃 Inventory first</option>';
+  } else {
+    inv.forEach(item => {
+      const stock = item.totalUnits.toLocaleString('en');
+      const lbl   = item.unitLabel || 'unit';
+      const opt   = document.createElement('option');
+      opt.value   = item.id;
+      opt.textContent = item.displayName + '  (' + stock + ' ' + lbl + 's)';
+      if(item.totalUnits <= 0){ opt.textContent += ' — OUT OF STOCK'; opt.disabled = true; }
+      sel.appendChild(opt);
+    });
+  }
+  sel.value = '';
+}
+
+function _selectSaleProduct(val){
+  const info = document.getElementById('sale-prod-info');
+  if(!val){ _saleSelectedProduct = null; info.style.display = 'none'; return; }
+  const inv  = (typeof getInventory === 'function') ? getInventory() : [];
+  const item = inv.find(i => String(i.id) === String(val));
+  if(!item){ _saleSelectedProduct = null; info.style.display = 'none'; return; }
+  _saleSelectedProduct = item;
+
+  // Show info bar
+  const stock = item.totalUnits.toLocaleString('en');
+  const lbl   = item.unitLabel || 'unit';
+  info.style.display = '';
+  info.innerHTML = `✔ <strong>${esc(item.displayName)}</strong> &nbsp;·&nbsp; ${stock} ${lbl}s in stock &nbsp;·&nbsp; Cost: Le ${item.costPerUnit.toLocaleString('en')} / ${lbl}`;
+
+  // Pre-fill category from the inventory item
+  _saleCatSelected = item.category || null;
+
+  // Clear amount / qty so user enters fresh values
+  document.getElementById('sale-item-amount').value = '';
+  document.getElementById('sale-item-qty').value = '';
+  document.getElementById('sale-item-err').textContent = '';
+}
+
+function saleAddItem(){
+  const amtRaw = (document.getElementById('sale-item-amount').value||'').trim();
+  const qtyRaw = (document.getElementById('sale-item-qty').value||'').trim();
+  const errEl  = document.getElementById('sale-item-err');
+  errEl.textContent = '';
+
+  if(!_saleSelectedProduct){
+    errEl.textContent = 'Please pick a product from the list above.'; return;
+  }
+  const amount = parseFloat(amtRaw);
+  if(!amtRaw||isNaN(amount)||amount<=0){ errEl.textContent = 'Please enter a valid amount.'; return; }
+
+  const qty = parseFloat(qtyRaw)||null;
+
+  // Qty is required for inventory-tracked products so COGS can be calculated correctly
+  if(!qty || qty <= 0){
+    errEl.textContent = 'Quantity is required — needed to calculate cost of goods sold.'; return;
+  }
+
+  const spu = amount / qty;
+  const item = _saleSelectedProduct;
+
+  // Inventory stock check
+  if(item.totalUnits<=0){
+    errEl.textContent = item.displayName+' is out of stock!'; return;
+  }
+  if(qty > item.totalUnits){
+    errEl.textContent = 'Only '+item.totalUnits.toLocaleString()+' '+(item.unitLabel||'unit')+'s in stock.'; return;
+  }
+
+  const cat = item.category || _saleCatSelected || 'Product sales';
+  _saleItems.push({ item:item.displayName, category:cat, amount, qty, sellingPricePerUnit:spu });
+
+  // Reset add-item fields
+  _saleSelectedProduct = null;
+  _saleCatSelected = null;
+  document.getElementById('sale-item-amount').value = '';
+  document.getElementById('sale-item-qty').value   = '';
+  document.getElementById('sale-prod-info').style.display = 'none';
+
+  // Reset dropdown
+  const sel = document.getElementById('sale-prod-select');
+  if(sel) sel.value = '';
+
+  _renderSaleItems();
+}
+
+function saleRemoveItem(idx){
+  _saleItems.splice(idx,1);
+  _renderSaleItems();
+}
+
+function _renderSaleItems(){
+  const list  = document.getElementById('sale-items-list');
+  const total = _saleItems.reduce((s,i)=>s+i.amount,0);
+  const saveBtn = document.getElementById('sale-save-btn');
+  const totalRow = document.getElementById('sale-total-row');
+
+  list.innerHTML = '';
+  if(!_saleItems.length){
+    list.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--ink3);text-align:center;padding:10px 0">No items added yet</div>';
+    saveBtn.disabled = true; saveBtn.style.opacity='.5';
+    totalRow.style.display = 'none';
+    return;
+  }
+
+  _saleItems.forEach((item,idx)=>{
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--paper3);border:1px solid var(--rule2);border-radius:var(--radius);padding:10px 12px';
+    row.innerHTML = `
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(item.item)}</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--ink3);margin-top:1px">${esc(item.category)}${item.qty?` · ${item.qty} units`:''}</div>
+      </div>
+      <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green);white-space:nowrap">${fmt(item.amount)}</div>
+      <button class="del-row" onclick="saleRemoveItem(${idx})" title="Remove" style="font-size:16px;flex-shrink:0">×</button>`;
+    list.appendChild(row);
+  });
+
+  document.getElementById('sale-total-val').textContent = fmt(total);
+  totalRow.style.display = 'flex';
+  saveBtn.disabled = false; saveBtn.style.opacity='1';
+}
+
+function saleSave(){
+  if(!_saleItems.length){ document.getElementById('sale-err').textContent='Add at least one item.'; return; }
+  const customer = (document.getElementById('sale-customer').value||'').trim();
+  const saleGroupId = 'SG-' + Date.now();
+  const saleDate = new Date().toISOString();
+  const records = getRecords();
+
+  _saleItems.forEach((item, idx) => {
+    const entry = {
+      id: Date.now() + idx + 1,
+      type: 'income',
+      category: item.category,
+      item: item.item,
+      qty: item.qty ? String(item.qty) : '',
+      sellingPricePerUnit: item.sellingPricePerUnit||undefined,
+      note: customer ? 'Customer: '+customer : '',
+      amount: item.amount,
+      date: saleDate,
+      _saleGroup: saleGroupId,
+      _saleCustomer: customer||''
+    };
+    records.push(entry);
+  });
+
+  // Save income records first, so invDeductOnSale can append sale_cost records on top
+  saveRecords(records);
+
+  _saleItems.forEach((item) => {
+    // Inventory deduction per item — qty is always present (enforced in saleAddItem)
+    if(typeof invDeductOnSale==='function' && item.qty){
+      _invMatchCache = null;
+      invDeductOnSale(item.item, String(item.qty), item.amount);
+    }
+  });
+  closeSaleBuilder();
+  render();
+
+  const total = _saleItems.reduce((s,i)=>s+i.amount,0);
+  toast(`Sale recorded — ${_saleItems.length} item${_saleItems.length>1?'s':''}, ${fmt(total)}${customer?' for '+customer:''}`);
+
+  // Offer to print receipt
+  const groupRecords = getRecords().filter(r=>r._saleGroup===saleGroupId);
+  if(groupRecords.length) printGroupReceipt(saleGroupId);
+}
+
+// ── Group invoice print ──
+function printGroupInvoice(saleGroupId){
+  const allRecs = getRecords();
+  const items = allRecs.filter(r=>r._saleGroup===saleGroupId);
+  if(!items.length) return;
+
+  const s = getSettings()||{};
+  const bizName = s.bizName||'My Business';
+  const BUSINESSES_LOCAL = typeof BUSINESSES!=='undefined'?BUSINESSES:[];
+  const biz = BUSINESSES_LOCAL.find(b=>b.id===s.bizId)||{};
+  const bizType = biz.name||''; const bizIcon = biz.icon||'';
+  const bizPhone = s.phone||''; const bizEmail = s.email||''; const bizAddress = s.address||'';
+
+  const customer = items[0]._saleCustomer||'';
+  const invoiceNum = 'INV-'+saleGroupId.slice(-8);
+  const saleDate = new Date(items[0].date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const today = new Date().toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const fmt2 = n=>'Le '+Math.round(Math.abs(n)).toLocaleString('en');
+  const total = items.reduce((s,r)=>s+r.amount,0);
+
+  const rows = items.map((r,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>${r.item.replace(/&amp;/g,'&')}</td>
+      <td>${r.category.replace(/&amp;/g,'&')}</td>
+      <td style="text-align:center">${r.qty||'—'}</td>
+      <td style="text-align:right">${r.sellingPricePerUnit?fmt2(r.sellingPricePerUnit):'—'}</td>
+      <td style="text-align:right;font-weight:700">${fmt2(r.amount)}</td>
+    </tr>`).join('');
+
+  const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<title>Invoice – ${invoiceNum}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Literata:ital,wght@0,400;1,400&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Literata',Georgia,serif;color:#1a2e1c;background:#fff}
+  @media screen{body{padding:40px 20px;max-width:860px;margin:0 auto}}
+  .wrap{background:#fff;border:1px solid #c8bfa8;border-radius:8px;padding:48px 52px;max-width:760px;margin:0 auto}
+  @media print{body{padding:0}.wrap{border:none;padding:30px 36px;max-width:100%}.no-print{display:none}@page{margin:15mm 18mm;size:A4 portrait}}
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1a2e1c;padding-bottom:24px;margin-bottom:28px;gap:20px;flex-wrap:wrap}
+  .bname{font-family:'DM Serif Display',Georgia,serif;font-size:28px;font-style:italic;color:#1a2e1c;margin-bottom:4px}
+  .bsub{font-family:'DM Mono',monospace;font-size:10px;color:#6a8f6d;letter-spacing:.1em;text-transform:uppercase}
+  .bmeta{font-family:'DM Mono',monospace;font-size:10px;color:#6a8f6d;margin-top:3px}
+  .ilbl{font-family:'DM Serif Display',Georgia,serif;font-size:38px;font-style:italic;color:#3a5c3d;text-align:right}
+  .imeta{font-family:'DM Mono',monospace;font-size:11px;color:#6a8f6d;margin-top:4px;text-align:right}
+  .imeta strong{color:#1a2e1c}
+  .clbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#6a8f6d;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c8bfa8}
+  .cname{font-family:'DM Serif Display',Georgia,serif;font-size:18px;font-style:italic;color:#1a2e1c;margin-bottom:2px}
+  .cmeta{font-family:'DM Mono',monospace;font-size:10px;color:#6a8f6d}
+  table{width:100%;border-collapse:collapse;margin-bottom:20px}
+  th{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#6a8f6d;padding:7px 10px;text-align:left;border-bottom:1.5px solid #1a2e1c;border-top:1.5px solid #1a2e1c}
+  td{font-family:'DM Mono',monospace;font-size:11px;padding:8px 10px;border-bottom:1px solid #e4dcc8;color:#1a2e1c}
+  tr:last-child td{border-bottom:none}
+  .totals{margin-left:auto;width:240px;border:1px solid #c8bfa8;border-radius:6px;overflow:hidden;margin-bottom:28px}
+  .trow{display:flex;justify-content:space-between;padding:9px 14px;font-family:'DM Mono',monospace;font-size:11px;border-bottom:1px solid #e4dcc8}
+  .trow:last-child{border-bottom:none;background:#1a2e1c;color:#f5f0e8;font-weight:700;font-size:14px}
+  .ftr{border-top:1px solid #c8bfa8;padding-top:16px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:10px}
+  .fnote{font-family:'Literata',Georgia,serif;font-size:11px;font-style:italic;color:#6a8f6d;max-width:320px;line-height:1.6}
+  .fstamp{font-family:'DM Mono',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;text-transform:uppercase}
+  .pbtn{display:block;margin:24px auto 0;padding:13px 36px;background:#1a2e1c;color:#f5f0e8;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;cursor:pointer}
+</style></head><body>
+<div class="wrap">
+  <div class="hdr">
+    <div>
+      <div class="bname">${bizIcon?bizIcon+' ':''}${bizName.replace(/&amp;/g,'&')}</div>
+      <div class="bsub">${bizType||'Business'} · Sierra Leone</div>
+      ${bizPhone?`<div class="bmeta">📞 ${bizPhone}</div>`:''}
+      ${bizEmail?`<div class="bmeta">✉️ ${bizEmail}</div>`:''}
+      ${bizAddress?`<div class="bmeta">📍 ${bizAddress}</div>`:''}
+    </div>
+    <div>
+      <div class="ilbl">Invoice</div>
+      <div class="imeta">No. <strong>${invoiceNum}</strong></div>
+      <div class="imeta">Date <strong>${saleDate}</strong></div>
+      <div class="imeta">Printed <strong>${today}</strong></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:40px;margin-bottom:28px;flex-wrap:wrap">
+    ${customer?`<div style="flex:1;min-width:160px"><div class="clbl">Bill To</div><div class="cname">${customer.replace(/&amp;/g,'&')}</div></div>`:''}
+    <div style="flex:1;min-width:160px">
+      <div class="clbl">Sold By</div>
+      <div class="cname">${bizName.replace(/&amp;/g,'&')}</div>
+      ${bizType?`<div class="cmeta">${bizType}</div>`:''}
+      <div class="cmeta">Sierra Leone · Le</div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>#</th><th>Item</th><th>Category</th><th style="text-align:center">Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Amount</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+
+  <div class="totals">
+    <div class="trow"><span>${items.length} item${items.length>1?'s':''}</span><span style="color:#6a8f6d">—</span></div>
+    <div class="trow"><span>TOTAL</span><span>${fmt2(total)}</span></div>
+  </div>
+
+  <div class="ftr">
+    <div class="fnote">Thank you for your business${customer?' — '+customer.replace(/&amp;/g,'&'):''}.</div>
+    <div class="fstamp">FA Accountant · Sierra Leone<br>${today}</div>
+  </div>
+</div>
+<button class="pbtn no-print" onclick="window.print()">🖨 Print / Save as PDF</button>
+</body></html>`;
+
+  const win=window.open('','_blank','width=860,height=740');
+  if(!win){alert('Please allow pop-ups.');return;}
+  win.document.write(html); win.document.close();
+}
+
+// ── Group receipt print ──
+function printGroupReceipt(saleGroupId){
+  const allRecs = getRecords();
+  const items = allRecs.filter(r=>r._saleGroup===saleGroupId);
+  if(!items.length) return;
+
+  const s = getSettings()||{};
+  const bizName = s.bizName||'My Business';
+  const BUSINESSES_LOCAL = typeof BUSINESSES!=='undefined'?BUSINESSES:[];
+  const biz = BUSINESSES_LOCAL.find(b=>b.id===s.bizId)||{};
+  const bizType = biz.name||''; const bizIcon = biz.icon||'';
+  const bizPhone = s.phone||''; const bizEmail = s.email||''; const bizAddress = s.address||'';
+
+  const customer = items[0]._saleCustomer||'';
+  const receiptNum = 'RCP-'+saleGroupId.slice(-5);
+  const saleDate = new Date(items[0].date).toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const saleTime = new Date(items[0].date).toLocaleTimeString('en-SL',{hour:'2-digit',minute:'2-digit'});
+  const today = new Date().toLocaleDateString('en-SL',{day:'2-digit',month:'short',year:'numeric'});
+  const fmt2 = n=>'Le '+Math.round(Math.abs(n)).toLocaleString('en');
+  const total = items.reduce((s,r)=>s+r.amount,0);
+
+  const itemRows = items.map(r=>`
+    <tr>
+      <td style="padding:5px 0;border-bottom:1px dashed #e4dcc8;font-family:'DM Mono',monospace;font-size:10px;color:#1a2e1c">
+        ${r.item.replace(/&amp;/g,'&')}${r.qty?`<br><span style="font-size:9px;color:#6a8f6d">× ${r.qty}</span>`:''}
+      </td>
+      <td style="padding:5px 0;border-bottom:1px dashed #e4dcc8;text-align:right;font-family:'DM Mono',monospace;font-size:11px;font-weight:700;color:#1a2e1c">${fmt2(r.amount)}</td>
+    </tr>`).join('');
+
+  const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<title>Receipt – ${receiptNum}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500;600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Mono',monospace;color:#1a2e1c;background:#f5f0e8}
+  @media screen{body{padding:40px 20px;display:flex;flex-direction:column;align-items:center}}
+  .ro{background:#fff;max-width:380px;width:100%;border-radius:4px 4px 0 0;box-shadow:0 4px 24px rgba(0,0,0,.12)}
+  .ro::after{content:'';display:block;height:16px;background:
+    radial-gradient(circle at 8px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 24px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 40px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 56px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 72px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 88px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 104px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 120px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 136px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 152px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 168px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 184px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 200px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 216px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 232px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 248px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 264px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 280px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 296px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 312px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 328px 0,#f5f0e8 6px,transparent 7px),radial-gradient(circle at 344px 0,#f5f0e8 6px,transparent 7px),
+    radial-gradient(circle at 360px 0,#f5f0e8 6px,transparent 7px);
+    background-size:16px 16px;background-color:#fff}
+  @media print{body{padding:0!important;background:#fff!important;display:block}.ro{box-shadow:none!important;max-width:100%!important;border-radius:0!important}.ro::after{display:none!important}.no-print{display:none!important}@page{margin:8mm 10mm;size:80mm auto}}
+  .ri{padding:24px 24px 18px}
+  .rb{text-align:center;border-bottom:1px dashed #c8bfa8;padding-bottom:14px;margin-bottom:14px}
+  .rbn{font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-style:italic;color:#1a2e1c;margin-bottom:2px}
+  .rbs{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#6a8f6d;margin-bottom:3px}
+  .rnum{font-size:9px;color:#aaa;letter-spacing:.06em}
+  .cust{text-align:center;margin-bottom:12px;padding-bottom:10px;border-bottom:1px dashed #c8bfa8}
+  .cust-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#6a8f6d;margin-bottom:2px}
+  .cust-name{font-family:'DM Serif Display',Georgia,serif;font-size:15px;font-style:italic;color:#1a2e1c}
+  table{width:100%;border-collapse:collapse}
+  .ttl{display:flex;justify-content:space-between;align-items:center;border-top:1.5px solid #1a2e1c;padding:10px 0;margin-top:6px}
+  .ttl-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#1a2e1c;font-weight:700}
+  .ttl-val{font-family:'DM Serif Display',Georgia,serif;font-size:22px;font-style:italic;color:#1a5c1a;font-weight:700}
+  .dt{text-align:center;font-size:9px;color:#aaa;margin:10px 0 6px}
+  .ftr{text-align:center;font-size:8px;color:#aaa;letter-spacing:.06em;text-transform:uppercase;border-top:1px dashed #c8bfa8;padding-top:10px;margin-top:8px;line-height:1.8}
+  .pbtn{display:block;margin:20px auto 0;padding:12px 32px;background:#1a2e1c;color:#f5f0e8;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;font-weight:600;cursor:pointer}
+</style></head><body>
+<div class="ro"><div class="ri">
+  <div class="rb">
+    <div class="rbn">${bizIcon?bizIcon+' ':''}${bizName.replace(/&amp;/g,'&')}</div>
+    <div class="rbs">${bizType||'Business'} · Sierra Leone</div>
+    ${bizPhone?`<div class="rnum">${bizPhone}</div>`:''}
+    ${bizEmail?`<div class="rnum">${bizEmail}</div>`:''}
+    ${bizAddress?`<div class="rnum">${bizAddress}</div>`:''}
+    <div class="rnum">${receiptNum}</div>
+  </div>
+
+  ${customer?`<div class="cust"><div class="cust-lbl">Customer</div><div class="cust-name">${customer.replace(/&amp;/g,'&')}</div></div>`:''}
+
+  <div class="dt">${saleDate} · ${saleTime}</div>
+
+  <table>
+    <tbody>${itemRows}</tbody>
+  </table>
+
+  <div class="ttl">
+    <span class="ttl-lbl">Total (${items.length} item${items.length>1?'s':''})</span>
+    <span class="ttl-val">${fmt2(total)}</span>
+  </div>
+
+  <div class="ftr">Thank you for your business<br>FA Accountant · Sierra Leone · ${today}</div>
+</div></div>
+<button class="pbtn no-print" onclick="window.print()">🖨 Print Receipt</button>
+</body></html>`;
+
+  const win=window.open('','_blank','width=460,height=680');
+  if(!win){alert('Please allow pop-ups.');return;}
+  win.document.write(html); win.document.close();
+}
 
 // ══════════ SESSION TIMEOUT ══════════
 const SESSION_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
@@ -4202,7 +5474,7 @@ document.addEventListener('keydown',e=>{
     if(['inp-amount','inp-note','inp-qty'].includes(e.target.id)) submitEntry();
     if(e.target.id==='ob-bizname') obNext(1);
   }
-  if(e.key==='Escape'){ closeBizModal(); closeEditModal(); closeReportModal(); closeBackupModal(); closeForgotModal(); closeShareModal(); closeAdminModal(); if(typeof closeCreditModal==='function') closeCreditModal(); }
+  if(e.key==='Escape'){ closeBizModal(); closeProfileModal(); closeSaleBuilder(); closeEditModal(); closeReportModal(); closeBackupModal(); closeForgotModal(); closeShareModal(); closeAdminModal(); if(typeof closeCreditModal==='function') closeCreditModal(); }
 });
 
 // ══════════ AUTH LOGIC ══════════
