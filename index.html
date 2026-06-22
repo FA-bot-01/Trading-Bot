@@ -425,6 +425,7 @@ input, select, textarea { font-size:16px !important; }
   background:#2a6b2e; color:#fff; font-family:var(--mono); font-size:12px;
   padding:12px 20px; display:none; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
 #update-banner button { background:#fff; color:#2a6b2e; border:none; border-radius:4px; padding:6px 16px; font-family:var(--mono); font-size:11px; font-weight:700; cursor:pointer; }
+#update-banner .dismiss-btn { background:transparent !important; color:#fff !important; padding:0 6px !important; font-size:20px !important; font-weight:400 !important; line-height:1; opacity:.8; border-radius:0; flex-shrink:0; }
 
 /* ── ONBOARDING ── */
 #onboarding { position:fixed; inset:0; background:var(--paper);
@@ -1733,6 +1734,7 @@ header { padding:32px 0 20px; border-bottom:2px solid var(--ink); margin-bottom:
 <div id="update-banner">
   <span>🆕 <strong>Update available:</strong> <span id="update-msg">New version ready</span></span>
   <button onclick="applyUpdate()">Update Now</button>
+  <button class="dismiss-btn" onclick="dismissUpdate()" title="Dismiss">✕</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -4882,7 +4884,8 @@ function checkForUpdate(){
       getDoc(doc(db2,'_system','update')).then(snap=>{
         if(!snap.exists()) return;
         const d=snap.data();
-        if(d.version && d.version !== APP_VERSION && d.message){
+        const dismissed = localStorage.getItem('fa-dismissed-update');
+        if(d.version && d.version !== APP_VERSION && d.message && d.version !== dismissed){
           document.getElementById('update-msg').textContent = d.message;
           document.getElementById('update-banner').style.display='flex';
           localStorage.setItem('fa-pending-update', JSON.stringify(d));
@@ -4892,7 +4895,15 @@ function checkForUpdate(){
   }).catch(()=>{});
 }
 
+function dismissUpdate(){
+  const pending = JSON.parse(localStorage.getItem('fa-pending-update')||'{}');
+  if(pending.version) localStorage.setItem('fa-dismissed-update', pending.version);
+  document.getElementById('update-banner').style.display='none';
+}
+
 function applyUpdate(){
+  const pending = JSON.parse(localStorage.getItem('fa-pending-update')||'{}');
+  if(pending.version) localStorage.setItem('fa-dismissed-update', pending.version);
   document.getElementById('update-banner').style.display='none';
   toast('Updating… please wait');
   setTimeout(()=>{ window.location.reload(true); }, 800);
