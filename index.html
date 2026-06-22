@@ -5627,6 +5627,8 @@ async function doRegister(){
   // Save registration metadata
   localStorage.setItem('fa-session', JSON.stringify({userId, phone, name}));
   localStorage.setItem('fa-profile-'+userId, JSON.stringify({name, phone}));
+  // Save registration date for free trial period
+  localStorage.setItem('fa-registered-'+userId, Date.now().toString());
   // Generate and store recovery code
   const recoveryCode = userId.slice(0,9).toUpperCase();
   localStorage.setItem('fa-recovery-'+userId, recoveryCode);
@@ -5675,6 +5677,18 @@ async function checkSubThenShow(){
     }
     showAppAfterAuth();
   } else {
+    // Check 30-day free trial for new accounts
+    const registeredAt = parseInt(localStorage.getItem('fa-registered-'+window._userId)||'0', 10);
+    if(registeredAt){
+      const msIn30Days = 30 * 24 * 60 * 60 * 1000;
+      const daysLeft = Math.ceil((registeredAt + msIn30Days - Date.now()) / (24*60*60*1000));
+      if(daysLeft > 0){
+        if(daysLeft <= 7){
+          setTimeout(()=>toast('⏳ Free trial: '+daysLeft+' day(s) left. Please activate your subscription!'), 1200);
+        }
+        showAppAfterAuth(); return;
+      }
+    }
     showSubscriptionGate(sub.status, sub);
   }
 }
